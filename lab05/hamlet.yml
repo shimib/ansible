@@ -1,0 +1,58 @@
+- hosts: target
+  name: Rosencrantz
+  vars:
+    food: cowsay
+    food_state: present
+  tasks:
+  - name: display OS
+    debug:
+      var: ansible_distribution
+  - name: install food
+    become: yes
+    become_method: sudo
+    yum: 
+      name: "{{ food }}"
+      state: "{{ food_state }}"
+  - name: install fortune
+    become: yes
+    become_method: sudo
+    yum: 
+      name: fortune-mod 
+      state: latest 
+  - name: run fortune
+    command: /usr/bin/fortune
+    register: fortune
+  - name: display fortune
+    debug:
+      var: fortune
+- hosts: localhost, target
+  tasks:
+  - name: add groups
+    become: yes
+    become_method: sudo
+    group: 
+      name: "{{ item }}"
+    become: yes
+    become_method: sudo
+    with_items:
+    - devs
+    - ops
+    - pms
+    - qa
+  - name: define users
+    become: yes
+    become_method: sudo
+    user:
+      name: "{{ item.name }}"
+      shell: "{{ item.shell }}"
+      groups: "{{ item.groups }}"
+    with_items:
+    - name: "{{ ansible_user_id }}01"
+      shell: "/bin/bash"
+      groups: "devs,qa"
+    - name: "{{ ansible_user_id }}02"
+      shell: "/bin/bash"
+      groups: "devs"
+    - name: "{{ ansible_user_id }}03"
+      shell: "/bin/zsh"
+      groups: "qa"
