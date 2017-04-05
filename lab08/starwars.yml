@@ -1,0 +1,7 @@
+- hosts: localhost
+  vars:
+    rogue: "regroup at death star"
+  roles:
+    - order
+    - { role: order, order_text: "{{ rogue }}", use_the_force: True }
+  

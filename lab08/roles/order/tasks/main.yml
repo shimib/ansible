@@ -1,0 +1,17 @@
+---
+- name: debug msg
+  debug:
+    msg: "{{ order_origin|upper }} {{ order_text|upper }}"
+- name: add yoda user
+  user:
+    name: yoda
+  become: yes
+  become_method: sudo
+  when: (use_the_force is defined and use_the_force == True)
+- name: remove yoda user
+  user:
+    name: yoda
+    state: absent
+  become: yes
+  become_method: sudo
+  when: (use_the_force is defined and use_the_force == False)
