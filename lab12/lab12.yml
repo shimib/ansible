@@ -1,0 +1,5 @@
+- hosts: localhost
+  tasks:
+  - name: set max num in files
+    set_max:
+      files: "/home/ec2-user/ansible/lab12/x1,/home/ec2-user/ansible/lab12/x2,/home/ec2-user/ansible/lab12/x3"
